@@ -1,4 +1,3 @@
-// src/hooks/useWeather.jsx
 import { useState, useEffect } from 'react';
 
 const useWeather = (defaultLocation = { lat: 44.34, lon: 10.99 }) => {

@@ -6,7 +6,8 @@ import TenDIcon from '../weather-app-master/10d.png';
 
 function Modal() {
   const [isOpen, setIsOpen] = useState(false);
-  const { weatherData, city, getLocation, kelvinToCelsius } = useWeather();
+  const [searchInput, setSearchInput] = useState('');
+  const { weatherData, city, getLocation, kelvinToCelsius, searchLocation } = useWeather();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -16,14 +17,30 @@ function Modal() {
     getLocation();
   }, []);
 
+  const handleSearch = () => {
+    searchLocation(searchInput);
+    setIsOpen(false); // Cerrar la barra de búsqueda después de hacer clic en "Search"
+  };
+
   return (
     <div className="flex h-[1023px] w-[459px] bg-[#1E213A] relative mx-auto gap-0 opacity-100">
       {/* Sidebar */}
       <div className={`fixed top-0 left-0 h-[1023px] w-[459px] bg-[#1E213A] text-white z-50 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <button className="absolute top-4 right-4 text-white text-3xl" onClick={toggleSidebar}>×</button>
         <div className="p-4">
-          <input type="text" placeholder="search location" className="w-full p-2 mb-4 rounded bg-gray-800 text-white placeholder-gray-500 focus:outline-none"/>
-          <button className="w-full p-2 mb-4 bg-blue-600 rounded hover:bg-blue-700">Search</button>
+          <input
+            type="text"
+            placeholder="Search location"
+            className="w-full p-2 mb-4 rounded bg-gray-800 text-white placeholder-gray-500 focus:outline-none"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
+          <button
+            className="w-full p-2 mb-4 bg-blue-600 rounded hover:bg-blue-700"
+            onClick={handleSearch} // Agregar el evento onClick al botón de búsqueda
+          >
+            Search
+          </button>
           <a href="#" className="block p-2 mb-2 hover:bg-gray-700 rounded">London</a>
           <a href="#" className="block p-2 mb-2 hover:bg-gray-700 rounded">Barcelona</a>
           <a href="#" className="block p-2 mb-2 hover:bg-gray-700 rounded">Long Beach</a>
