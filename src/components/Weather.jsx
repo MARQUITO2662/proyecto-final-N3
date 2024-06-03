@@ -6,7 +6,7 @@ import BotonUbicacion from './BotonUbicacion';
 import TarjetaClima from './TarjetaClima';
 
 const Weather = () => {
-  const { weatherData, city, getLocation, kelvinToCelsius, kelvinToFahrenheit } = useWeather();
+  const { weatherData, city, getLocation, kelvinToCelsius, kelvinToFahrenheit, searchLocation } = useWeather();
 
   if (!weatherData) {
     return <div>Loading...</div>;
@@ -14,14 +14,13 @@ const Weather = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold underline bg-cyan-600">
-        Weather App
-      </h1>
-      <div className="flex justify-between">
-        <BarraBusqueda onBuscar={(ubicacion) => console.log('Buscar clima en', ubicacion)} />
+      <div className="flex justify-between w-full mb-4">
+        <button className="text-white" onClick={() => searchLocation('')}>
+          Search for places
+        </button>
         <BotonUbicacion onClick={getLocation} />
       </div>
-      {city && <h2 className="text-2xl mt-4">Weather in {city}</h2>}
+      {city && <h2 className="text-2xl mt-4 text-white">Weather in {city}</h2>}
       <div className="grid grid-cols-1 gap-4 mt-4">
         {weatherData.list.map((item) => (
           <TarjetaClima
@@ -31,7 +30,8 @@ const Weather = () => {
               temperaturaC: kelvinToCelsius(item.main.temp),
               temperaturaF: kelvinToFahrenheit(item.main.temp),
               descripcion: item.weather[0].description,
-              fecha: new Date(item.dt * 1000).toLocaleString() // Formatear la fecha
+              fecha: new Date(item.dt * 1000).toLocaleString(),
+              icono: item.weather[0].icon,
             }}
           />
         ))}

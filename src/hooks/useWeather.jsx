@@ -48,6 +48,21 @@ const useWeather = (defaultLocation = { lat: 44.34, lon: 10.99 }) => {
     }
   };
 
+  const searchLocation = (ubicacion) => {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${ubicacion}&appid=5e0663c97bbc6806e669376ae4d7ae70`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.coord) {
+          setLocation({ lat: data.coord.lat, lon: data.coord.lon });
+        } else {
+          console.error('Location not found');
+        }
+      })
+      .catch(error => {
+        console.error('Error searching location:', error);
+      });
+  };
+
   const kelvinToCelsius = (kelvin) => (kelvin - 273.15).toFixed(2);
   const kelvinToFahrenheit = (kelvin) => ((kelvin - 273.15) * 9/5 + 32).toFixed(2);
 
@@ -57,6 +72,7 @@ const useWeather = (defaultLocation = { lat: 44.34, lon: 10.99 }) => {
     getLocation,
     kelvinToCelsius,
     kelvinToFahrenheit,
+    searchLocation,
   };
 };
 

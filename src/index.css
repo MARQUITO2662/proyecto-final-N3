@@ -1,9 +1,90 @@
 /* src/index.css */
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+/* Custom styles */
+/* button {
+  margin: 10px 0;
+} */
+
+
+
+/* src/index.css */
+/*   @import 'tailwindcss/tailwind.css';
+
+body {
+  font-family: 'Arial', sans-serif;
+}
+
+.bg-navy {
+  background: url('Cloudy.png'), url('IsoRainSwrsDay.png'), #0A0A5A;
+  background-size: cover, cover;
+  background-blend-mode: overlay;
+  opacity: 0.95;
+}  */
+ 
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom styles */
-button {
-  margin: 10px 0;
+body {
+  font-family: 'Arial', sans-serif;
 }
+
+.bg-navy {
+  background: url('Cloudy.png'), url('IsoRainSwrsDay.png'), #0A0A5A;
+  background-size: cover, cover;
+  background-blend-mode: overlay;
+  opacity: 0.95;
+}
+
+.bg-customDark {
+  background: #100E1D;
+}
+
+.bg-customSecondaryDark {
+  background: #1E213A;
+}
+
+.bg-customButton {
+  background: #6E707A;
+}
+
+.text-customtext {
+  color: #E7E7EB;
+} 
+ 
+
+
+
+.bg-customSecondaryDark {
+  background-color: #1e293b; /* Ejemplo de color de fondo oscuro personalizado */
+}
+
+.bg-customButton {
+  background-color: #6E707A; /* Ejemplo de color de botón personalizado */
+}
+
+.text-customtext {
+  color: #ffffff; /* Ejemplo de color de texto personalizado */
+}
+
+.bg-cloudy {
+  background: url('/assets/images/Cloudy.png');
+  background-size: cover;
+}
+
+.bg-isorainswrsday {
+  background: url('/assets/images/IsoRainSwrsDay.png');
+  background-size: cover;
+  opacity: 0.05;
+}
+
+ 
+
+
+
+ 
