@@ -17,9 +17,9 @@ function Modal() {
   }, []);
 
   return (
-    <div className="flex h-[1023px] w-[459px] bg-customSecondaryDark relative mx-auto">
+    <div className="flex h-[1023px] w-[459px] bg-[#1E213A] relative mx-auto gap-0 opacity-100">
       {/* Sidebar */}
-      <div className={`fixed top-0 left-0 h-[1023px] w-[459px] bg-customSecondaryDark text-white z-50 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`fixed top-0 left-0 h-[1023px] w-[459px] bg-[#1E213A] text-white z-50 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <button className="absolute top-4 right-4 text-white text-3xl" onClick={toggleSidebar}>×</button>
         <div className="p-4">
           <input type="text" placeholder="search location" className="w-full p-2 mb-4 rounded bg-gray-800 text-white placeholder-gray-500 focus:outline-none"/>
