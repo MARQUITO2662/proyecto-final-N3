@@ -23,7 +23,7 @@ body {
   background-blend-mode: overlay;
   opacity: 0.95;
 }  */
- 
+
 
 
 @tailwind base;
@@ -58,18 +58,16 @@ body {
 } 
  
 
-
-
 .bg-customSecondaryDark {
-  background-color: #1e293b; /* Ejemplo de color de fondo oscuro personalizado */
+  background-color: #1e293b; 
 }
 
 .bg-customButton {
-  background-color: #6E707A; /* Ejemplo de color de botón personalizado */
+  background-color: #6E707A; 
 }
 
 .text-customtext {
-  color: #ffffff; /* Ejemplo de color de texto personalizado */
+  color: #ffffff; 
 }
 
 .bg-cloudy {
@@ -82,9 +80,11 @@ body {
   background-size: cover;
   opacity: 0.05;
 }
-
+ 
  
 
+ 
+ 
 
 
  
