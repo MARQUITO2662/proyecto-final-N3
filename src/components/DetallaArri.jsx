@@ -1,12 +1,17 @@
 import React from 'react';
+import img01d from '/src/weather-app-master/01d.png';
+import img03d from '/src/weather-app-master/03d.png';
+import img09d from '/src/weather-app-master/09d.png';
+import img10d from '/src/weather-app-master/10d.png';
+import cloudBackground from '/src/weather-app-master/Cloud-background.png';
 
 const DetallaArri = () => {
   const weatherIcons = {
-    'Tomorrow': '01d.png', // Suponiendo que 'Tomorrow' corresponde al icono '01d.png'
-    'Sun, 7 Jun': '03d.png',
-    'Mon, 8 Jun': '09d.png',
-    'Tue, 9 Jun': '10d.png',
-    'Wed, 10 Jun': 'Cloud-background.png',
+    'Tomorrow': img01d,
+    'Sun, 7 Jun': img03d,
+    'Mon, 8 Jun': img09d,
+    'Tue, 9 Jun': img10d,
+    'Wed, 10 Jun': cloudBackground,
   };
 
   return (
@@ -15,7 +20,7 @@ const DetallaArri = () => {
         {['Tomorrow', 'Sun, 7 Jun', 'Mon, 8 Jun', 'Tue, 9 Jun', 'Wed, 10 Jun'].map((day, index) => (
           <div key={index} className="relative bg-customSecondaryDark p-3 rounded-lg text-center w-32 h-44" style={{ background: '#1E213A' }}>
             <p className="text-xs mt-0.5 mb-1">{day}</p>
-            <img src={`/src/weather-app-master/${weatherIcons[day]}`} alt="weather icon" className="mx-auto mb-2 w-10 h-10" />
+            <img src={weatherIcons[day]} alt="weather icon" className="mx-auto mb-2 w-10 h-10" />
             <p className="text-xs mt-0.5"><span className="font-semibold">16°C</span> 11°C</p>
           </div>
         ))}
