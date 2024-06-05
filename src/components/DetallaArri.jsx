@@ -17,7 +17,7 @@ const DetallaArri = () => {
   };
 
   const convertTemperature = (temp) => {
-    return unit === 'C' ? temp : (temp * 9/5) + 32;
+    return unit === 'C' ? Math.round(temp) : Math.round((temp * 9/5) + 32);
   };
 
   return (
@@ -30,20 +30,22 @@ const DetallaArri = () => {
             <p className="text-xs mt-0.5"><span className="font-semibold">{convertTemperature(16)}°{unit}</span> {convertTemperature(11)}°{unit}</p>
           </div>
         ))}
-        <button 
-          className="absolute bg-white text-black p-2 rounded-full" 
-          style={{ width: '40px', height: '40px', top: '-80px', right: '20px', borderRadius: '50%', opacity: '1' }}
-          onClick={() => setUnit('C')}
-        >
-          °C
-        </button>
-        <button 
-          className="absolute bg-gray-700 text-white p-2 rounded-full" 
-          style={{ width: '40px', height: '40px', top: '-80px', right: '80px', borderRadius: '50%', opacity: '1' }}
-          onClick={() => setUnit('F')}
-        >
-          °F
-        </button>
+        <div className="absolute top-0 right-0 flex flex-col mt-2 mr-2 space-y-2">
+          <button 
+            className={`bg-white text-black p-2 rounded-full ${unit === 'C' ? 'bg-blue-500 text-white' : ''}`} 
+            style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+            onClick={() => setUnit('C')}
+          >
+            °C
+          </button>
+          <button 
+            className={`bg-gray-700 text-white p-2 rounded-full ${unit === 'F' ? 'bg-blue-500' : 'bg-gray-700'}`} 
+            style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+            onClick={() => setUnit('F')}
+          >
+            °F
+          </button>
+        </div>
       </div>
     </div>
   );
