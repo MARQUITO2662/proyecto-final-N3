@@ -24,8 +24,8 @@ const DetallaArri = () => {
             <p className="text-xs mt-0.5"><span className="font-semibold">16°C</span> 11°C</p>
           </div>
         ))}
-        <button className="absolute bg-white text-black p-2 rounded-full" style={{ width: '40px', height: '40px', top: '-80px', right: '20px', borderRadius: '50%', opacity: '0' }}>°C</button>
-        <button className="absolute bg-gray-700 text-white p-2 rounded-full" style={{ width: '40px', height: '40px', top: '-80px', right: '80px', borderRadius: '50%', opacity: '0' }}>°F</button>
+        <button className="absolute bg-white text-black p-2 rounded-full" style={{ width: '40px', height: '40px', top: '-80px', right: '20px', borderRadius: '50%', opacity: '1' }}>°C</button>
+        <button className="absolute bg-gray-700 text-white p-2 rounded-full" style={{ width: '40px', height: '40px', top: '-80px', right: '80px', borderRadius: '50%', opacity: '1' }}>°F</button>
       </div>
     </div>
   );

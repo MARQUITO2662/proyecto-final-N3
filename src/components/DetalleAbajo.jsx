@@ -4,7 +4,7 @@ import { FaWind } from 'react-icons/fa';
 const DetalleAbajo = () => {
   return (
     <div className='flex flex-col items-center w-full'>
-      <h2 className="text-xl mb-4 opacity-0" style={{ width: '220px', height: '28px', fontFamily: 'Raleway', fontSize: '24px', fontWeight: '700', lineHeight: '28.18px', textAlign: 'left' }}>
+      <h2 className="text-xl mb-4 opacity-100" style={{ width: '220px', height: '28px', fontFamily: 'Raleway', fontSize: '24px', fontWeight: '700', lineHeight: '28.18px', textAlign: 'left' }}>
         Today's Highlights
       </h2>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-32">
