@@ -83,6 +83,23 @@ body {
  
  
 
+
+.outside-modal-box {
+  width: 981px;
+  height: 1023px;
+  position: absolute;
+  top: 0;
+  left: 459px;
+  background-color: #100E1D;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+
+
+
+
  
  
 

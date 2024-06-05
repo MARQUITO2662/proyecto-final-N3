@@ -1,78 +1,52 @@
+
+// hooks/useWeather.js
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const useWeather = (defaultLocation = { lat: 44.34, lon: 10.99 }) => {
+const API_KEY = 'TU_API_KEY';
+
+const useWeather = () => {
   const [weatherData, setWeatherData] = useState(null);
-  const [location, setLocation] = useState(defaultLocation);
+  const [forecastData, setForecastData] = useState(null);
   const [city, setCity] = useState('');
-
-  useEffect(() => {
-    if (location.lat && location.lon) {
-      fetchWeather(location.lat, location.lon);
-      fetchCityName(location.lat, location.lon);
-    }
-  }, [location]);
-
-  const fetchWeather = async (lat, lon) => {
+  
+  const getLocation = async () => {
     try {
-      const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=5e0663c97bbc6806e669376ae4d7ae70`);
-      const data = await response.json();
-      setWeatherData(data);
+      const response = await axios.get('https://ipapi.co/json/');
+      const location = response.data.city;
+      searchLocation(location);
     } catch (error) {
-      console.error('Error fetching weather data:', error);
+      console.error(error);
     }
   };
 
-  const fetchCityName = async (lat, lon) => {
+  const kelvinToCelsius = (temp) => {
+    return Math.round(temp - 273.15);
+  };
+
+  const searchLocation = async (location) => {
     try {
-      const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=5e0663c97bbc6806e669376ae4d7ae70`);
-      const data = await response.json();
-      setCity(data.name);
+      const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=5e0663c97bbc6806e669376ae4d7ae70`);
+      setWeatherData(response.data);
+      setCity(location);
+      
+      const forecastResponse = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=5e0663c97bbc6806e669376ae4d7ae70`);
+      setForecastData(forecastResponse.data);
     } catch (error) {
-      console.error('Error fetching city name:', error);
+      console.error(error);
     }
   };
-
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setLocation({
-          lat: position.coords.latitude,
-          lon: position.coords.longitude,
-        });
-      }, (error) => {
-        console.error('Error getting location:', error);
-      });
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-  };
-
-  const searchLocation = (ubicacion) => {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${ubicacion}&appid=5e0663c97bbc6806e669376ae4d7ae70`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.coord) {
-          setLocation({ lat: data.coord.lat, lon: data.coord.lon });
-        } else {
-          console.error('Location not found');
-        }
-      })
-      .catch(error => {
-        console.error('Error searching location:', error);
-      });
-  };
-
-  const kelvinToCelsius = (kelvin) => (kelvin - 273.15).toFixed(2);
-  const kelvinToFahrenheit = (kelvin) => ((kelvin - 273.15) * 9/5 + 32).toFixed(2);
 
   return {
     weatherData,
+    forecastData,
     city,
     getLocation,
     kelvinToCelsius,
-    kelvinToFahrenheit,
-    searchLocation,
+    searchLocation
   };
 };
 
 export default useWeather;
+
+
