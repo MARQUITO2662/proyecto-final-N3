@@ -1,76 +1,84 @@
-
-// Modal.js
 import React, { useState, useEffect } from 'react';
-import useWeather from '../hooks/useWeather';
-import { FaCrosshairs, FaMapMarkerAlt } from 'react-icons/fa';
-import CloudBackground from '../weather-app-master/Cloud-background.png';
-import DetallaArri from './DetallaArri';
-import DetalleAbajo from './DetalleAbajo';
 
-function Modal() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [searchInput, setSearchInput] = useState('');
-  const { weatherData, forecastData, city, getLocation, kelvinToCelsius, searchLocation } = useWeather();
+import Location from './Location';
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+function Modal({ weatherData, toggleSidebar }) {
+  const [currentTemperature, setCurrentTemperature] = useState('');
+  const [currentWeatherDescription, setCurrentWeatherDescription] = useState('');
+  const [currentDate, setCurrentDate] = useState('');
+ 
 
   useEffect(() => {
-    getLocation();
-  }, []);
+    const updateWeather = () => {
+      if (!weatherData || !weatherData.list || weatherData.list.length === 0) {
+        return;
+      }
 
-  const handleSearch = () => {
-    searchLocation(searchInput);
-    setIsOpen(false);
+      const currentWeather = weatherData.list[0];
+
+      if (!currentWeather.main || !currentWeather.weather || currentWeather.weather.length === 0) {
+        return;
+      }
+
+      const temperature = currentWeather.main.temp;
+      const weatherDescription = currentWeather.weather[0].description;
+      const temperatureInCelsius = kelvinToCelsius(temperature);
+      setCurrentTemperature(temperatureInCelsius.toFixed(2));
+      setCurrentWeatherDescription(weatherDescription);
+
+      setCurrentDate(getCurrentDate());
+      
+    };
+
+    const kelvinToCelsius = (temp) => {
+      return temp - 273.15;
+    };
+
+    const getCurrentDate = () => {
+      const date = new Date();
+      const options = { weekday: 'long', month: 'short', day: 'numeric' };
+      return date.toLocaleDateString('en-US', options);
   };
 
+  // Llamar a la función de actualización del clima cuando se monte el componente
+  updateWeather();
+
+  // Configurar un temporizador para que se actualice cada 3 horas
+  const interval = setInterval(() => {
+      updateWeather();
+  }, 3 * 60 * 60 * 1000); // 3 horas en milisegundos
+
+  // Limpiar el temporizador cuando el componente se desmonte para evitar fugas de memoria
+  return () => clearInterval(interval);
+
+}, [weatherData]);
+  
+
   return (
-    <div className="flex h-screen w-full sm:w-[459px] sm:h-[1023px] bg-[#1E213A] relative mx-auto gap-0 opacity-100">
-      <div className={`fixed top-0 left-0 h-full sm:h-[1023px] w-full sm:w-[459px] bg-[#1E213A] text-white z-50 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <button className="absolute top-4 right-4 text-white text-3xl" onClick={toggleSidebar}>×</button>
-        <div className="p-4">
-          <input
-            type="text"
-            placeholder="Search location"
-            className="w-full p-2 mb-4 rounded bg-gray-800 text-white placeholder-gray-500 focus:outline-none"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-          />
-          <button
-            className="w-full p-2 mb-4 bg-blue-600 rounded hover:bg-blue-700"
-            onClick={handleSearch}
-          >
-            Search
-          </button>
-          <a href="#" className="block p-2 mb-2 hover:bg-gray-700 rounded">London</a>
-          <a href="#" className="block p-2 mb-2 hover:bg-gray-700 rounded">Barcelona</a>
-          <a href="#" className="block p-2 mb-2 hover:bg-gray-700 rounded">Long Beach</a>
-        </div>
+    <div className="flex flex-col items-center h-screen w-full bg-customSecondaryDark">
+      <div className="flex justify-between w-full p-6">
+        <button className="bg-customButton text-customtext rounded px-4 py-2 " style={{ height: '35px' }} onClick={toggleSidebar}>Search for places</button>
+        <Location />
       </div>
-      
-      <div className="flex-grow relative">
-        <div className="absolute top-0 left-0 w-full h-full bg-cover bg-center opacity-5" style={{ backgroundImage: `url(${CloudBackground})` }}></div>
-        <div className="relative z-10 p-4 flex flex-col items-center">
-          <div className="flex justify-between items-center w-full mb-4">
-            <button className="p-2 bg-customButton text-customtext rounded" onClick={toggleSidebar}>Search for places</button>
-            <button className="p-2 bg-customButton text-customtext rounded-full" onClick={getLocation}>
-              <FaCrosshairs size={24} />
-            </button>
-          </div>
-          {weatherData && (
-            <div className="text-center mt-8">
-              <p className="text-6xl mb-8">{kelvinToCelsius(weatherData.main.temp)}°C</p>
-              <p className="text-xl">{weatherData.weather[0].description}</p>
-              <p className="text-lg text-gray-400 mb-4">Today • {new Date().toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })}</p>
-              <div className="flex items-center justify-center mt-2 mb-8">
-                <FaMapMarkerAlt size={24} className="mr-2" />
-                <p className="text-lg text-gray-400">{city}</p>
-              </div>
-            </div>
-          )}
-          {forecastData && <DetallaArri forecastData={forecastData} kelvinToCelsius={kelvinToCelsius} />}
-          {weatherData && <DetalleAbajo weatherData={weatherData} />}
+      <div className="w-full h-2/6 relative">
+        <figure className="w-full h-full opacity-20">
+          <img src={"/Cloud-background.png"} alt="Cloud Background" className="w-full h-full object-cover" />
+        </figure>
+        <figure className="w-28 absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 z-0">
+          <img src={`https://openweathermap.org/img/wn/${weatherData && weatherData.list && weatherData.list.length > 0 && weatherData.list[0].weather[0].icon}@2x.png`} alt="" />
+        </figure>
+      </div>
+      <div className="text-center mb-12">
+        <div className="text-[144px] font-light leading-none">
+          {currentTemperature}<span className="text-5xl font-normal text-[#A09FB1] align-top ml-2">°C</span>
+        </div>
+        <div className="text-[#A09FB1] text-4xl mt-6">{currentWeatherDescription}</div>
+      </div>
+      <div className="text-[#88869D] text-center">
+        <div className="mb-4">{currentDate}</div>
+        <div className="flex items-center justify-center">
+          <span className="material-icons mr-2"></span>
+          {weatherData && weatherData.city && weatherData.city.name || 'Select a location'}
         </div>
       </div>
     </div>
@@ -78,8 +86,3 @@ function Modal() {
 }
 
 export default Modal;
-
-
-
-
-

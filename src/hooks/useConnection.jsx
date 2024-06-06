@@ -3,24 +3,23 @@ import React, { createContext, useState, useEffect } from 'react';
 const WeatherContext = createContext();
 
 const WeatherProvider = ({ children }) => {
-    const [weatherData, setWeatherData] = useState(null); /* Almacena los datos del clima.*/
-    const [location, setLocation] = useState(null); /* Almacena  la ubicación del usuario.*/
-    const [city, setCity] = useState(''); /* Almacena el nombre de la ciudad.*/
-    const [loading, setLoading] = useState(true); /* indica si los datos se están cargando.*/
-    const [error, setError] = useState(null); /* Para manejar los errores de la API.*/
+    const [weatherData, setWeatherData] = useState(null);
+    const [location, setLocation] = useState(null);
+    const [city, setCity] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-
-    /* Obtiene los datos del clima por Latitud y longitud.*/
     const fetchWeather = async (lat, lon) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=c739b37edac93e5b65459fa362b12a26`);
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=537f062506c5be127447c17ac2332472`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
             setWeatherData(data);
+            setCity(data.city.name);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -28,28 +27,28 @@ const WeatherProvider = ({ children }) => {
         }
     };
 
-    /*Obtiene los datos del clima por el nombre de la ciudad.*/
-    const fetchWeatherByCity = async (cityName) => {
+    const searchCity = async (cityName) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=c739b37edac93e5b65459fa362b12a26`);
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=537f062506c5be127447c17ac2332472`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            setWeatherData(data);
-        } catch (err) {
-            setError(err.message);
-        } finally {
+            const { coord } = data;
+            setLocation({ lat: coord.lat, lon: coord.lon });
+            await fetchWeather(coord.lat, coord.lon);
+        } catch (error) {
+            setError(error.message);
+        }  finally{
             setLoading(false);
         }
     };
 
-    /* Obtiene los datos por el nombre de la ciudad .*/
     const fetchCityName = async (lat, lon) => {
         try {
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=c739b37edac93e5b65459fa362b12a26`);
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=537f062506c5be127447c17ac2332472`);
             const data = await response.json();
             setCity(data.name);
         } catch (error) {
@@ -76,15 +75,15 @@ const WeatherProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        getLocation(); 
-    }, []); 
+        getLocation();
+    }, []);
 
     useEffect(() => {
-        if (location) { 
+        if (location) {
             fetchWeather(location.lat, location.lon);
             fetchCityName(location.lat, location.lon);
         }
-    }, [location]); 
+    }, [location]);
 
     return (
         <WeatherContext.Provider
@@ -93,9 +92,9 @@ const WeatherProvider = ({ children }) => {
                 city,
                 getLocation,
                 setLocation,
-                fetchWeatherByCity, // Agregamos fetchWeatherByCity al contexto
+                searchCity,
                 loading,
-                error,
+                error
             }}
         >
             {children}

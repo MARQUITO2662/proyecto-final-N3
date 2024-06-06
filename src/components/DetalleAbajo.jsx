@@ -1,55 +1,45 @@
+import React, { useContext } from 'react';
+import { WeatherContext } from '../hooks/useConnection';
 
+const DetalleAbajo = () => {
+  const { weatherData, loading, error } = useContext(WeatherContext);
 
-
-import React from 'react';
-import { FaWind } from 'react-icons/fa';
-
-const DetalleAbajo = ({ weatherData }) => {
-  if (!weatherData || !weatherData.wind || !weatherData.main) {
-    return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!weatherData || !weatherData.list || weatherData.list.length === 0) {
+    return <div>No weather data available</div>;
   }
 
+  const currentWeather = weatherData.list[0];
+
   return (
-    <div className='flex flex-col items-center w-full'>
-      <h2 className="text-xl mb-4" style={{ width: '220px', height: '28px', fontFamily: 'Raleway', fontSize: '24px', fontWeight: '700', lineHeight: '28.18px', textAlign: 'left' }}>
-        Today's Highlights
-      </h2>
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-32">
-        <div className="bg-customSecondaryDark p-4 rounded text-center" style={{ width: '328px', height: '204px', background: '#1E213A' }}>
+    <div className="w-full md:w-3/4 mx-auto">
+      <h2 className="text-xl mb-4">Today's Highlights</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-customSecondaryDark p-2 rounded text-center md:w-full md:h-52">
           <p>Wind status</p>
-          <p className="text-3xl font-bold" style={{ fontFamily: 'Raleway', fontSize: '64px', fontWeight: '700', lineHeight: '75.14px', textAlign: 'center' }}>{weatherData.wind.speed} mph</p>
-          <div className="flex justify-center items-center mt-4">
-            <FaWind size={30} className="transform rotate-[150deg]" style={{ width: '29.49px', height: '29.49px' }} />
-            <span style={{ width: '38px', height: '16px', fontFamily: 'Raleway', fontSize: '18px', fontWeight: '500', lineHeight: '16.44px', textAlign: 'left' }}>{weatherData.wind.deg}°</span>
-          </div>
+          <p className="text-3xl" style={{ fontFamily: 'Raleway, sans-serif', fontSize: '45px', padding: '43px' }}>{currentWeather.wind.speed} m/s</p>
+          <p>WSW</p>
         </div>
-        <div className="bg-customSecondaryDark p-4 rounded text-center" style={{ width: '328px', height: '204px', background: '#1E213A' }}>
+        <div className="bg-customSecondaryDark p-4 rounded text-center md:w-full md:h-52">
           <p>Humidity</p>
-          <div className="flex justify-center items-center">
-            <p className="text-3xl mb-0" style={{ fontFamily: 'Raleway', fontSize: '64px', fontWeight: '700', lineHeight: '75.14px', textAlign: 'center' }}>{weatherData.main.humidity}</p>
-            <p className="text-xs mb-0" style={{ fontFamily: 'Raleway', fontSize: '36px', fontWeight: '400', lineHeight: '42.26px', textAlign: 'center' }}>%</p>
+          <p className="text-3xl" style={{ fontFamily: 'Raleway, sans-serif', fontSize: '45px', padding: '29px' }}>{currentWeather.main.humidity}%</p>
+          <div className="w-full bg-zinc-700 rounded-full h-2.5 dark:bg-zinc-700 ">
+            <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${currentWeather.main.humidity}%` }}></div>
+            <div className="flex justify-between w-full mb-2">
+              <span>0</span>
+              <span>50</span>
+              <span>100</span>
+            </div>
           </div>
-          <div className="relative w-full bg-zinc-700 rounded-full h-2.5 dark:bg-zinc-700 mt-8 mb-8">
-            <div className="bg-yellow-300 h-2.5 rounded-full" style={{ width: `${weatherData.main.humidity}%` }}></div>
-            <div className="absolute left-0 top-0 transform -translate-y-6 text-xs">0</div>
-            <div className="absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-6 text-xs">50</div>
-            <div className="absolute right-0 top-0 transform -translate-y-6 text-xs">100</div>
-          </div>
-          <p className="text-xs w-full text-right mt-1">% </p>
         </div>
-        <div className="bg-customSecondaryDark p-4 rounded text-center" style={{ width: '328px', height: '159px', background: '#1E213A' }}>
+        <div className="bg-customSecondaryDark p-4 rounded text-center md:w-full md:h-40 ">
           <p>Visibility</p>
-          <div className="flex justify-center items-center">
-            <p className="text-3xl mb-0" style={{ fontFamily: 'Raleway', fontSize: '64px', fontWeight: '700', lineHeight: '75.14px', textAlign: 'center', width: '197px', height: '75px' }}>{weatherData.visibility / 1000}</p>
-            <span style={{ fontFamily: 'Raleway', fontSize: '36px', fontWeight: '500', lineHeight: '42.26px', textAlign: 'center' }}>km</span>
-          </div>
+          <p className="text-3xl" style={{ fontFamily: 'Raleway, sans-serif', fontSize: '45px', padding: '29px' }}>{(currentWeather.visibility / 1000).toFixed(1)} Miles</p>
         </div>
-        <div className="bg-customSecondaryDark p-4 rounded text-center" style={{ width: '328px', height: '160px', background: '#1E213A' }}>
+        <div className="bg-customSecondaryDark p-4 rounded text-center md:w-full md:h-40">
           <p>Air Pressure</p>
-          <div className="flex justify-center items-center">
-            <p className="text-3xl mb-0" style={{ fontFamily: 'Raleway', fontSize: '64px', fontWeight: '700', lineHeight: '75.14px', textAlign: 'center', width: '186px', height: '75px' }}>{weatherData.main.pressure}</p>
-            <span style={{ fontFamily: 'Raleway', fontSize: '36px', fontWeight: '500', lineHeight: '42.26px', textAlign: 'center' }}>mb</span>
-          </div>
+          <p className="text-3xl" style={{ fontFamily: 'Raleway, sans-serif', fontSize: '45px', padding: '29px' }}>{currentWeather.main.pressure} Mb</p>
         </div>
       </div>
       <p className="text-center mt-8">
@@ -60,4 +50,3 @@ const DetalleAbajo = ({ weatherData }) => {
 };
 
 export default DetalleAbajo;
-

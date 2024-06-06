@@ -4,7 +4,7 @@ import DetalleAbajo from './DetalleAbajo';
 
 const Detalles = () => {
   return (
-    <div className='w-11/12 mt-16 p-16'>
+    <div className="flex, grid, w-full, md:w-1/2, lg:w-1/3, sm:flex-col, md:flex-row " style={{fontFamily: 'raleway'}}>
       <DetallaArri />
       <DetalleAbajo />
     </div>
